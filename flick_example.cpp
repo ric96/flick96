@@ -108,11 +108,11 @@ void onXYZCb(uint16_t x, uint16_t y, uint16_t z){
 }
 
 int main(void) {
-	Flick flick(23, 24);
+	Flick flick(34, 33);
 	
 	flick.touchCallback = onTouchCb;
-	//flick.airWheelCallback = airwheelCb;
-	//flick.xyzCallback = onXYZCb;
+	flick.airWheelCallback = airwheelCb;
+	flick.xyzCallback = onXYZCb;
 	flick.gestureCallback = onGestureCb;
 	usleep(250000);	
         int ret = flick.SetRuntimeParameter(0xa1, 0x1f, 0xFFFFFFFF); // lock data output   <-----

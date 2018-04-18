@@ -63,15 +63,7 @@ Flick::Flick(uint8_t xferPin, uint8_t resetPin) {
 	fdatasync(i2cFd);
 
   mraa::Result status;
-  //mraa::Gpio xfer_gpio(XFR_PIN_GPIO);
-  mraa::Gpio rst_gpio(RST_PIN_GPIO );
-
-/*  status = this->xfer_gpio.dir(mraa::DIR_IN);
-    if (status != mraa::SUCCESS) {
-        printError(status);
-        return;
-    }
-*/
+  mraa::Gpio rst_gpio(this->rst);
   status = rst_gpio.dir(mraa::DIR_OUT);
     if (status != mraa::SUCCESS) {
         printError(status);
@@ -90,9 +82,6 @@ Flick::Flick(uint8_t xferPin, uint8_t resetPin) {
             return;
         }
   usleep(50);
-
-  //mraa_deinit();
-
   int ret = _ReceiveMsg(); // receive firmware version info
 
 }
@@ -148,10 +137,7 @@ int Flick::_ReceiveMsg() {
 	int ret = -1;
 
 	mraa::Result status;
-	mraa::Gpio xfer_gpio(XFR_PIN_GPIO);
-//mraa::Gpio rst_gpio(GPIO_PIN_2);
-
-       //ret = read(i2cFd, _receiveData, 255);
+	mraa::Gpio xfer_gpio(this->xfer);
        status = xfer_gpio.dir(mraa::DIR_IN);
          if (status != mraa::SUCCESS) {
              printError(status);
@@ -159,7 +145,6 @@ int Flick::_ReceiveMsg() {
          }
 
         data = xfer_gpio.read();
-	printf("%d",data);
 
 	if (!data) {
 
@@ -170,7 +155,7 @@ int Flick::_ReceiveMsg() {
                  }
 
 
-               status = xfer_gpio.write(1);
+               status = xfer_gpio.write(0);
                  if (status != mraa::SUCCESS) {
                      printError(status);
                      return EXIT_FAILURE;
@@ -179,7 +164,7 @@ int Flick::_ReceiveMsg() {
 
 		ret = read(i2cFd, _receiveData, 255);
 
-                status = xfer_gpio.write(0);
+                status = xfer_gpio.write(1);
                  if (status != mraa::SUCCESS) {
                      printError(status);
                      return EXIT_FAILURE;
@@ -192,7 +177,6 @@ int Flick::_ReceiveMsg() {
                  }
 
 	}
-//	mraa_deinit();
 	return ret;
 }
 

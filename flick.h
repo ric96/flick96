@@ -10,8 +10,6 @@
 #include <stdint.h>
 
 #define I2C_DEV_ADDR 0x42
-#define XFR_PIN_GPIO 28
-#define RST_PIN_GPIO 27
 
 enum FlickTouch_t { 
 	TOUCH_SOUTH_ELECTRODE, 
